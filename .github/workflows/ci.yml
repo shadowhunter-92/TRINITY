@@ -30,18 +30,58 @@ jobs:
         run: python scripts/demo_end_to_end.py
       - name: Verify disposable loopback Modbus example
         run: python scripts/demo_modbus_loopback.py
-  onnx-cpu:
-    name: ONNX Runtime CPU / Python 3.11
+  arrow:
+    name: Arrow IPC / Python 3.11
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install optional ONNX CPU adapter
-        run: python -m pip install -e '.[compute-onnx]'
-      - name: Exercise actual ONNX model generation and CPU parity tests
-        run: python -m unittest discover -s tests -p 'test_compute_onnx.py' -v
-      - name: Benchmark actual ONNX Runtime CPU execution
-        run: python -m trinitylab.compute benchmark --onnxruntime --batch 8 --warmup 1 --repeats 3
+      - name: Install optional Arrow dependency
+        run: python -m pip install -e '.[data-arrow]'
+      - name: Run all tests including actual Arrow IPC
+        run: python -m unittest discover -s tests -v
+      - name: Exercise typed Arrow comparison and JSON result
+        run: python -m trinitylab.data arrow-benchmark --rows 200 --repeats 3 --seed 19 --output results/data_arrow_ci.json
+      - name: Verify generated report integrity
+        run: |
+          python -c "import json; d=json.load(open('results/data_arrow_ci.json')); assert d['rows']==200 and all(x['exact_roundtrip_valid'] for x in d['results'])"
+
+  onnx-cpu:
+    name: ONNX Runtime CPU / Python 3.11
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[compute-onnx]'
+      - run: python -m unittest discover -s tests -p 'test_compute_onnx.py' -v
+      - run: python -m trinitylab.compute benchmark --onnxruntime --batch 8 --warmup 1 --repeats 3
+  opcua:
+    name: OPC UA loopback / Python 3.11
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[industrial-opcua]'
+      - run: python -m unittest discover -s tests -p 'test_opcua.py' -v
+      - run: python scripts/demo_opcua_loopback.py
+  integration:
+    name: TRINITY Integration v0.3 / Python 3.11
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[integration-v03]'
+      - run: python -m unittest discover -s tests -v
+      - run: python scripts/demo_trinity_v03.py

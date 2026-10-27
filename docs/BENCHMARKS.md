@@ -35,3 +35,8 @@ The tracked JSON example in `benchmarks/baselines/lab_benchmarks.json` is an ini
 - Compute: realistic model import, runtime version pinning, accuracy fixtures, latency distribution, throughput under load and cost per verified inference.
 - Industrial: realistic equipment profiles, authorized protocol simulators, error injection, reconnection, time synchronization, mapping drift detection accuracy and gateway soak tests.
 - Data: actual Arrow IPC/Flight, schemas with nulls and nested data, buffer-lifetime correctness, end-to-end network transfers and realistic database/AI application pipelines.
+
+
+## Arrow IPC v0.2 optional benchmark
+
+`python -m trinitylab.data arrow-benchmark --rows 2000 --repeats 7` requires `pip install -e ".[data-arrow]"`. The benchmark reports typed-record materialization, encode, decode, and full row-verification separately. See [`ARROW_ADAPTER.md`](ARROW_ADAPTER.md) for semantics, allocation caveats, and why results do not imply network zero-copy or global cloud savings.

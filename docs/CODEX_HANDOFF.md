@@ -7,7 +7,7 @@ Before each Codex task, read `AGENTS.md`, `README.md`, `docs/ARCHITECTURE.md`,
 not directly on `main`. Run the full verification suite and report actual output.
 Do not claim real-world portability or savings from synthetic benchmarks.
 
-## Task A — Compute ONNX adapter (implemented in feature PR; verify CI before merge)
+## Task A — Compute ONNX adapter (suggested first PR)
 
 **Goal:** Add an optional, opt-in ONNX Runtime CPU provider adapter capable of loading
 one small licensed ONNX test model, without changing the standard-library offline core.
@@ -31,7 +31,7 @@ server, preserving network-disabled default and keeping Modbus code read-only.
 - Security notes explaining where real authentication, encryption and OT review are still required.
 - No writes to PLCs, no scanning and no claims of safety certification.
 
-## Task C — Data Arrow comparison (suggested third PR)
+## Task C — Data Arrow comparison (implemented in separate PR)
 
 **Goal:** Add opt-in Apache Arrow baseline for one typed dataset and make fair comparisons
 against laboratory JSON/binary codecs without equating borrowed views to network transfer.
@@ -55,6 +55,11 @@ three adapters exist, with explicit contracts and deterministic validation fixtu
 > Execute the repository verification commands, record observed outcomes and known
 > limitations, and prepare a PR summary. Do not broaden scope or touch live systems.
 
-## Repository policy
+### Data v0.2 handoff
 
-The branch-protection JSON lives in `.github/rulesets/main-protection.json`. It must be imported by a repository administrator via GitHub UI; see `docs/RULESET_IMPORT.md`. Never assert a committed ruleset is enforced until verified in GitHub settings.
+The optional Arrow IPC stream adapter lives in `trinitylab/data/arrow_adapter.py` and is documented in [`ARROW_ADAPTER.md`](ARROW_ADAPTER.md). Run the new dedicated CI job prior to merging; no PyArrow requirement may leak into core offline paths. Future development should focus on realistic typed workloads, process-native peak-memory measurement, and batch-size investigations—not an unsupported global performance claim.
+
+
+## v0.3 integrated milestone
+
+The optional full-system demo is `scripts/demo_trinity_v03.py` and its regression tests are in `tests/test_integration_v03.py`. Verify it only on a loopback test host with the `[integration-v03]` extra. See `docs/INTEGRATION_V03.md`. Continue by measuring real integration failure modes on authorized non-production datasets; do not access field PLCs.
