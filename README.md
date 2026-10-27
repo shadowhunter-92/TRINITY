@@ -1,16 +1,18 @@
-# TRINITY — Infrastructure Research Laboratory (v0.1.x development)
+# TRINITY — Infrastructure Research Laboratory (v0.1.0)
 
 **Three working, isolated infrastructure experiments in one offline-first Python repository.**
+
+**Data v0.2 (feature branch):** Optional Apache Arrow IPC stream adapter for typed nullable sensor records, strict metadata/schema validation, memory-ownership tests and a JSON-vs-Arrow serialization benchmark. See [Data Arrow guide](docs/ARROW_ADAPTER.md).
 
 > Research software, not production-certified infrastructure. A successful synthetic benchmark does not establish production performance, portability, security or commercial demand.
 
 | Project | Working laboratory capability | Not implemented yet |
 | --- | --- | --- |
-| **Compute** | Deterministic 2-layer ReLU MLP, reference and alternate Python CPU runtimes, optional NumPy CPU runtime, numerical correctness, latency/p95 reports | External ONNX model import, CUDA/ROCm, accelerator compilers, production serving (optional locally-generated ONNX CPU model now supported) |
+| **Compute** | Deterministic 2-layer ReLU MLP, reference and alternate Python CPU runtimes, optional NumPy CPU runtime, numerical correctness, latency/p95 reports | ONNX/model import, CUDA/ROCm, accelerator compilers, production serving |
 | **Industrial** | Simulated 16-bit registers, semantic mapping, bounds/quality checks, versioned profile drift, read-only Modbus FC03/FC04 client | OPC UA connector, plant discovery, PLC write, encrypted gateway, production safety certification |
-| **Data** | JSON/binary codec tests, borrowed memoryview, data-integrity checks, schema-diff, timing and allocation profiler | Arrow/Flight connector, cross-process zero copy, DB optimization, automatic production tracing |
+| **Data** | JSON/binary codecs, schema-diff; **optional** Arrow IPC stream and typed nullable round-trip benchmarks | Arrow Flight, cross-process zero copy, database optimization, automatic production tracing |
 
-All three default CLI examples are **local and offline**. Python **3.10+** is required. No third-party library is required to run the tests and main benchmarks. NumPy is optional for an additional accelerated CPU comparison. An ONNX Runtime CPU adapter is also available as an explicit opt-in optional extra.
+All three default CLI examples are **local and offline**. Python **3.10+** is required. No third-party library is required to run the tests and main benchmarks. NumPy is optional for an additional accelerated CPU comparison.
 
 ## Quick start (Windows / Linux / macOS)
 
@@ -52,16 +54,7 @@ Optional NumPy CPU backend:
 python -m trinitylab.compute benchmark --numpy --repeats 15
 ```
 
-Optional locally-generated ONNX Runtime CPU graph (requires explicit installation):
-
-```bash
-python -m pip install -e '.[compute-onnx]'
-python -m trinitylab.compute benchmark --onnxruntime --repeats 15
-```
-
-See [`docs/ONNX_ADAPTER.md`](docs/ONNX_ADAPTER.md) for exact float32/float64 tolerance semantics, safety boundaries and limitations. This does not download any model weights.
-
-**Pass condition:** Both Python engines and optional NumPy use `atol=1e-9`, `rtol=1e-7`; the optional ONNX float32 engine explicitly uses `atol=1e-5`, `rtol=1e-4`. Every engine must produce finite, shape-correct outputs. A failed comparison returns exit code 2. Report includes median and p95 latency, a comparison to reference, parameters, and host metadata. The two Python paths may have different performance; no speedup is presumed.
+**Pass condition:** Every alternative engine must match the Python reference to `atol=1e-9`, `rtol=1e-7` and produce finite outputs. A failed comparison returns exit code 2. Report includes median and p95 latency, a comparison to reference, parameters, and host metadata. The two Python paths may have different performance; no speedup is presumed.
 
 **What this proves:** a baseline inference-contract and testing harness across CPU implementations for a tiny deterministic neural network. **It does not prove** portability across AI accelerators, real model import, cost savings or compiler performance.
 
@@ -117,6 +110,15 @@ The benchmark measures three separate routes: UTF-8 JSON bytes, a clearly labele
 
 **What this proves:** basic payload correctness, boundary validation, schema evolution rules and a repeatable measurement harness. **It does not prove:** Arrow performance, global cloud savings or interoperable cross-machine zero-copy transport.
 
+### Optional typed Arrow IPC baseline (Data v0.2)
+
+```bash
+python -m pip install -e ".[data-arrow]"
+python -m trinitylab.data arrow-benchmark --rows 2000 --repeats 7 --seed 19
+```
+
+The Arrow experiment uses a deterministic `sensor_id: string`, `time_ms: int64`, `reading: nullable float64` record set, with exact row, null, and metadata verification against JSON record serialization. It reports build/encode/decode/validate stages; the existing Python `memoryview` experiment remains distinct and **must not** be presented as a network benchmark. Requires PyArrow only when explicitly enabled; CI installs it in a dedicated job. See [detailed protocol and benchmark limitations](docs/ARROW_ADAPTER.md).
+
 ## First cross-project integration demonstration
 
 ```bash
@@ -166,7 +168,6 @@ trinity-lab/
 │   ├── BENCHMARKS.md
 │   └── ROADMAP.md
 ├── .github/workflows/ci.yml  # GitHub Actions verification matrix
-├── .github/rulesets/main-protection.json # GitHub-importable protection settings
 ├── AGENTS.md             # Codex and coding-agent guardrails
 ├── CONTRIBUTING.md       # Contribution workflow
 ├── SECURITY.md           # Responsible disclosure entry point
@@ -200,9 +201,13 @@ This repo uses its own simple test payloads; it does not reproduce third-party i
 - [Local development and CI](docs/DEVELOPMENT.md)
 - [Contribution guide](CONTRIBUTING.md) and [security reporting](SECURITY.md)
 - [GitHub metadata and recommended owner settings](docs/REPOSITORY_SETUP.md)
-- [GitHub main branch ruleset import guide](docs/RULESET_IMPORT.md)
 - [Monorepo design decision](docs/decisions/0001-monorepo.md)
 
 Repository: [shadowhunter-92/TRINITY](https://github.com/shadowhunter-92/TRINITY).
 
 GitHub Actions will run the offline test/benchmark gate across Python 3.10–3.13 on changes to `main` and pull requests. See the CI page for its **actual** status; this documentation does not guarantee remote CI success.
+
+
+## Full three-runtime lab integration (v0.3)
+
+Install opt-in dependencies with `python -m pip install -e '.[integration-v03]'` and run `python scripts/demo_trinity_v03.py`. This exercises a disposable local OPC UA server, validated sensor records, Arrow IPC, and ONNX Runtime CPU. See [integration guide](docs/INTEGRATION_V03.md). Synthetic demonstration only; no predictive or industrial safety claims.

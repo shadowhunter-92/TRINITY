@@ -49,6 +49,11 @@ A later platform layer may unify identity, policy, observability, deployment man
 
 Pursue parallel research, but allocate engineering investment to evidence. Do not finance three complete compiler/OT/data infrastructure organizations merely because three markets are large. A path to a $1T company would require unusually broad adoption and enormous sustainable revenue; no figures in this repository support a valuation claim.
 
-### Compute optional ONNX CPU adapter (feature PR, awaiting review)
 
-The optional locally-generated ONNX CPU adapter has its own documentation in `docs/ONNX_ADAPTER.md`. This is not model import, not cross-hardware portability, and should not be marked production ready. Issue #1 is fulfilled only for the scoped synthetic-graph CPU adapter, pending optional CI validation.
+## Data v0.2: Apache Arrow IPC baseline (pull request)
+
+- Optional typed nullable stream codec and strict dataset metadata.
+- Deterministic JSON-vs-IPC round-trip benchmark with full output verification.
+- In-process Arrow Buffer lifetime test, malformed payload and schema mismatch tests.
+- GitHub Actions optional-PyArrow job, retaining zero-dependency core jobs.
+- Next validation: Arrow batch-size / stream-vs-file, native peak RSS and actual customer data-path profiling.
