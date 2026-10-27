@@ -48,3 +48,12 @@ A later platform layer may unify identity, policy, observability, deployment man
 ## Capital discipline
 
 Pursue parallel research, but allocate engineering investment to evidence. Do not finance three complete compiler/OT/data infrastructure organizations merely because three markets are large. A path to a $1T company would require unusually broad adoption and enormous sustainable revenue; no figures in this repository support a valuation claim.
+
+
+## Data v0.2: Apache Arrow IPC baseline (pull request)
+
+- Optional typed nullable stream codec and strict dataset metadata.
+- Deterministic JSON-vs-IPC round-trip benchmark with full output verification.
+- In-process Arrow Buffer lifetime test, malformed payload and schema mismatch tests.
+- GitHub Actions optional-PyArrow job, retaining zero-dependency core jobs.
+- Next validation: Arrow batch-size / stream-vs-file, native peak RSS and actual customer data-path profiling.

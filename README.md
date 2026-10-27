@@ -2,13 +2,15 @@
 
 **Three working, isolated infrastructure experiments in one offline-first Python repository.**
 
+**Data v0.2 (feature branch):** Optional Apache Arrow IPC stream adapter for typed nullable sensor records, strict metadata/schema validation, memory-ownership tests and a JSON-vs-Arrow serialization benchmark. See [Data Arrow guide](docs/ARROW_ADAPTER.md).
+
 > Research software, not production-certified infrastructure. A successful synthetic benchmark does not establish production performance, portability, security or commercial demand.
 
 | Project | Working laboratory capability | Not implemented yet |
 | --- | --- | --- |
 | **Compute** | Deterministic 2-layer ReLU MLP, reference and alternate Python CPU runtimes, optional NumPy CPU runtime, numerical correctness, latency/p95 reports | ONNX/model import, CUDA/ROCm, accelerator compilers, production serving |
 | **Industrial** | Simulated 16-bit registers, semantic mapping, bounds/quality checks, versioned profile drift, read-only Modbus FC03/FC04 client | OPC UA connector, plant discovery, PLC write, encrypted gateway, production safety certification |
-| **Data** | JSON/binary codec tests, borrowed memoryview, data-integrity checks, schema-diff, timing and allocation profiler | Arrow/Flight connector, cross-process zero copy, DB optimization, automatic production tracing |
+| **Data** | JSON/binary codecs, schema-diff; **optional** Arrow IPC stream and typed nullable round-trip benchmarks | Arrow Flight, cross-process zero copy, database optimization, automatic production tracing |
 
 All three default CLI examples are **local and offline**. Python **3.10+** is required. No third-party library is required to run the tests and main benchmarks. NumPy is optional for an additional accelerated CPU comparison.
 
@@ -107,6 +109,15 @@ python -m trinitylab.data schema-diff --old fixtures/data/schema_v1.json --new f
 The benchmark measures three separate routes: UTF-8 JSON bytes, a clearly labeled laboratory little-endian binary format, and a **read-only borrowed `memoryview`** of the same-process `array('d')` source. Reports show median encode/decode-plus-consume/end-to-end times, byte size, traced Python allocation peaks, and verified checksum. The memoryview route is **not** a network-transfer or wire-format alternative, so comparing it to serialization time is illustrative, not a fair claim of end-to-end transport speedup. `tracemalloc` cannot measure all native RSS.
 
 **What this proves:** basic payload correctness, boundary validation, schema evolution rules and a repeatable measurement harness. **It does not prove:** Arrow performance, global cloud savings or interoperable cross-machine zero-copy transport.
+
+### Optional typed Arrow IPC baseline (Data v0.2)
+
+```bash
+python -m pip install -e ".[data-arrow]"
+python -m trinitylab.data arrow-benchmark --rows 2000 --repeats 7 --seed 19
+```
+
+The Arrow experiment uses a deterministic `sensor_id: string`, `time_ms: int64`, `reading: nullable float64` record set, with exact row, null, and metadata verification against JSON record serialization. It reports build/encode/decode/validate stages; the existing Python `memoryview` experiment remains distinct and **must not** be presented as a network benchmark. Requires PyArrow only when explicitly enabled; CI installs it in a dedicated job. See [detailed protocol and benchmark limitations](docs/ARROW_ADAPTER.md).
 
 ## First cross-project integration demonstration
 

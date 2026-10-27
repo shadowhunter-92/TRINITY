@@ -31,7 +31,7 @@ server, preserving network-disabled default and keeping Modbus code read-only.
 - Security notes explaining where real authentication, encryption and OT review are still required.
 - No writes to PLCs, no scanning and no claims of safety certification.
 
-## Task C — Data Arrow comparison (suggested third PR)
+## Task C — Data Arrow comparison (implemented in separate PR)
 
 **Goal:** Add opt-in Apache Arrow baseline for one typed dataset and make fair comparisons
 against laboratory JSON/binary codecs without equating borrowed views to network transfer.
@@ -54,3 +54,7 @@ three adapters exist, with explicit contracts and deterministic validation fixtu
 > small commits, preserving offline-by-default behavior. Add tests and documentation.
 > Execute the repository verification commands, record observed outcomes and known
 > limitations, and prepare a PR summary. Do not broaden scope or touch live systems.
+
+### Data v0.2 handoff
+
+The optional Arrow IPC stream adapter lives in `trinitylab/data/arrow_adapter.py` and is documented in [`ARROW_ADAPTER.md`](ARROW_ADAPTER.md). Run the new dedicated CI job prior to merging; no PyArrow requirement may leak into core offline paths. Future development should focus on realistic typed workloads, process-native peak-memory measurement, and batch-size investigations—not an unsupported global performance claim.
