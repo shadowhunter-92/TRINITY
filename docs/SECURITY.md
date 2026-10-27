@@ -51,3 +51,11 @@ Before a paid industrial pilot: OT threat modeling, formal protocol testing, sta
 ## Vulnerability reports
 
 For this laboratory snapshot, review issues privately with the maintainers before sharing exploit details publicly. This repository is not backed by a staffed incident response team or a production patch SLA.
+
+### Experimental OPC UA adapter
+
+`trinitylab/industrial/opcua.py` is **disabled by default** and explicitly restricts
+connections to the numeric `127.0.0.1` loopback address. Its optional test server
+uses unencrypted/no-auth OPC UA locally only. No scans, writes, subscriptions,
+control methods or remote operations are supported. Do not use it in operational
+technology networks. See `docs/OPCUA_ADAPTER.md` for detailed boundaries.

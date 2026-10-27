@@ -1,0 +1,10 @@
+{
+  "machine_id": "laboratory_pump_001",
+  "version": 1,
+  "namespace_uri": "urn:trinity:industrial:lab",
+  "signals": [
+    {"signal_id": "motor_temperature", "identifier": "MotorTemperature", "unit": "degC", "scale": 1.0, "minimum": 0, "maximum": 120},
+    {"signal_id": "shaft_speed", "identifier": "ShaftSpeed", "unit": "rpm", "scale": 1.0, "minimum": 0, "maximum": 6000},
+    {"signal_id": "line_pressure", "identifier": "LinePressure", "unit": "bar", "scale": 0.01, "minimum": 0, "maximum": 200}
+  ]
+}

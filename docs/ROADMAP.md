@@ -48,3 +48,10 @@ A later platform layer may unify identity, policy, observability, deployment man
 ## Capital discipline
 
 Pursue parallel research, but allocate engineering investment to evidence. Do not finance three complete compiler/OT/data infrastructure organizations merely because three markets are large. A path to a $1T company would require unusually broad adoption and enormous sustainable revenue; no figures in this repository support a valuation claim.
+
+## Industrial v0.2 (experimental PR)
+
+- Optional `asyncua`-backed, read-only loopback connector with explicit namespace-based NodeId mapping.
+- Versioned JSON fixtures, data-quality flags, bounded timeouts, mapping drift checks and fresh-session reconnect demonstration.
+- Offline negative tests plus a dedicated real-protocol CI test job.
+- Still missing: certificate-based security, real-world device compatibility, multi-site resilience, long-lived session observability and customer-side validation. **Do not deploy to real equipment.**

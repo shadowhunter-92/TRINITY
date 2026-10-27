@@ -195,3 +195,15 @@ This repo uses its own simple test payloads; it does not reproduce third-party i
 Repository: [shadowhunter-92/TRINITY](https://github.com/shadowhunter-92/TRINITY).
 
 GitHub Actions will run the offline test/benchmark gate across Python 3.10–3.13 on changes to `main` and pull requests. See the CI page for its **actual** status; this documentation does not guarantee remote CI success.
+
+### Industrial v0.2: OPC UA read-only loopback experiment
+
+The optional industrial adapter uses `asyncua` with an **explicitly authorized local test endpoint only**. The default installation remains entirely offline; no PLC is contacted automatically.
+
+```bash
+python -m pip install '.[industrial-opcua]'
+python scripts/demo_opcua_loopback.py
+python -m unittest discover -s tests -p 'test_opcua.py' -v
+```
+
+It supports versioned node mappings, engineering-unit scaling, quality flags, timestamps and deterministic drift comparison. **This is not a production OT connector or safety-certified implementation.** See [OPC UA adapter documentation](docs/OPCUA_ADAPTER.md) and [security boundaries](docs/SECURITY.md).

@@ -54,3 +54,13 @@ three adapters exist, with explicit contracts and deterministic validation fixtu
 > small commits, preserving offline-by-default behavior. Add tests and documentation.
 > Execute the repository verification commands, record observed outcomes and known
 > limitations, and prepare a PR summary. Do not broaden scope or touch live systems.
+
+## Industrial v0.2 follow-up review checklist
+
+Check `trinitylab/industrial/opcua.py`, `scripts/demo_opcua_loopback.py`,
+`tests/test_opcua.py` and `docs/OPCUA_ADAPTER.md`. This is a **loopback-only**
+prototype. Next work should audit `asyncua` client behavior and parameter
+validation, expand controlled bad-quality and timeout integration coverage,
+and design a *separate* production architecture with certificate trust, authenticated
+OPC UA access, device allowlisting, safety review, approval gates and observability.
+Do not relax the loopback guard in the laboratory adapter itself.
