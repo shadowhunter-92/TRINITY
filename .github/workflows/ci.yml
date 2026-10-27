@@ -1,0 +1,32 @@
+name: Tests and reproducibility checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: trinity-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  laboratory:
+    name: Python ${{ matrix.python-version }} / Ubuntu
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Check syntax
+        run: python -m compileall -q trinitylab scripts tests
+      - name: Run offline tests, simulations and benchmarks
+        run: python scripts/verify_all.py
+      - name: Verify end-to-end simulated pipeline
+        run: python scripts/demo_end_to_end.py
+      - name: Verify disposable loopback Modbus example
+        run: python scripts/demo_modbus_loopback.py

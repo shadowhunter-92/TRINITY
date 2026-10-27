@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trinity-lab-mvps"
+version = "0.1.0"
+description = "Three secure and reproducible laboratory MVPs for AI execution, OT mapping and data interchange"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "TRINITY laboratory project"}]
+dependencies = []
+
+[project.optional-dependencies]
+compute-numpy = ["numpy>=1.26,<3"]
+test = ["pytest>=7,<10"]
+
+[project.scripts]
+trinity-compute = "trinitylab.compute.__main__:main"
+trinity-industrial = "trinitylab.industrial.__main__:main"
+trinity-data = "trinitylab.data.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["trinitylab*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

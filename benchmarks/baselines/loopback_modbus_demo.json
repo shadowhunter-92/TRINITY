@@ -1,0 +1,17 @@
+{
+  "demo": "disposable_loopback_modbus",
+  "expected": [
+    100,
+    101,
+    102
+  ],
+  "function": "03_read_holding",
+  "passed": true,
+  "project": "trinity_industrial",
+  "readings": [
+    100,
+    101,
+    102
+  ],
+  "scope": "loopback_only_no_real_hardware"
+}

@@ -1,0 +1,59 @@
+{
+  "batch_size": 8,
+  "caveat": "Synthetic CPU toy model only; not a general AI accelerator or model portability claim.",
+  "engines": [
+    {
+      "correctness": {
+        "failed_elements": 0,
+        "max_abs_error": 0.0,
+        "passed": true,
+        "reason": null
+      },
+      "engine": "python_reference",
+      "median_ms": 0.600416,
+      "p95_ms": 0.758499,
+      "speedup_vs_reference": 1.0
+    },
+    {
+      "correctness": {
+        "failed_elements": 0,
+        "max_abs_error": 0.0,
+        "passed": true,
+        "reason": null
+      },
+      "engine": "python_batched",
+      "median_ms": 0.723762,
+      "p95_ms": 0.849816,
+      "speedup_vs_reference": 0.8296
+    },
+    {
+      "correctness": {
+        "failed_elements": 0,
+        "max_abs_error": 2.914335439641036e-16,
+        "passed": true,
+        "reason": null
+      },
+      "engine": "numpy_matmul",
+      "median_ms": 0.025544,
+      "p95_ms": 0.032878,
+      "speedup_vs_reference": 23.5052
+    }
+  ],
+  "environment": {
+    "cpu_count": 5,
+    "pid_is_recorded": false,
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "processor": "not reported",
+    "python": "3.13.5"
+  },
+  "model": {
+    "hidden_dim": 48,
+    "input_dim": 32,
+    "output_dim": 8,
+    "seed": 7
+  },
+  "project": "trinity_compute",
+  "repeats": 8,
+  "scenario": "synthetic_tiny_mlp_float64_cpu",
+  "warmup": 3
+}

@@ -1,0 +1,9 @@
+{
+  "machine_id": "LAB-PUMP-01",
+  "version": 1,
+  "signals": [
+    {"signal_id": "motor_temperature", "address": 100, "unit": "degC", "scale": 0.1, "offset": 0, "minimum": -20, "maximum": 120},
+    {"signal_id": "shaft_speed", "address": 101, "unit": "rpm", "scale": 1, "offset": 0, "minimum": 0, "maximum": 5000},
+    {"signal_id": "line_pressure", "address": 102, "unit": "bar", "scale": 0.01, "offset": 0, "minimum": 0, "maximum": 30}
+  ]
+}

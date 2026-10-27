@@ -1,0 +1,130 @@
+{
+  "notes": [
+    "Simulated/workstation results; not representative of production hardware",
+    "No measured dollar savings or real industrial telemetry",
+    "Repeat on the target hardware with reference datasets"
+  ],
+  "results": {
+    "compute": {
+      "batch_size": 6,
+      "caveat": "Synthetic CPU toy model only; not a general AI accelerator or model portability claim.",
+      "engines": [
+        {
+          "correctness": {
+            "failed_elements": 0,
+            "max_abs_error": 0.0,
+            "passed": true,
+            "reason": null
+          },
+          "engine": "python_reference",
+          "median_ms": 0.2329,
+          "p95_ms": 0.308108,
+          "speedup_vs_reference": 1.0
+        },
+        {
+          "correctness": {
+            "failed_elements": 0,
+            "max_abs_error": 0.0,
+            "passed": true,
+            "reason": null
+          },
+          "engine": "python_batched",
+          "median_ms": 0.259808,
+          "p95_ms": 0.589346,
+          "speedup_vs_reference": 0.8964
+        }
+      ],
+      "environment": {
+        "cpu_count": 5,
+        "pid_is_recorded": false,
+        "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+        "processor": "not reported",
+        "python": "3.13.5"
+      },
+      "model": {
+        "hidden_dim": 32,
+        "input_dim": 24,
+        "output_dim": 8,
+        "seed": 7
+      },
+      "project": "trinity_compute",
+      "repeats": 12,
+      "scenario": "synthetic_tiny_mlp_float64_cpu",
+      "warmup": 3
+    },
+    "data": {
+      "environment": {
+        "cpu_count": 5,
+        "pid_is_recorded": false,
+        "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+        "processor": "not reported",
+        "python": "3.13.5"
+      },
+      "notes": [
+        "memoryview is borrowed memory in one process, not a wire format or network zero-copy protocol",
+        "JSON/struct produce bytes; in-memory view avoids serialization and is not an apples-to-apples transport alternative",
+        "tracemalloc sees primarily Python allocations, not all native RSS or system buffers",
+        "Python timing and allocation instrumentation add overhead; benchmark relative paths on the same host",
+        "Binary little-endian format is custom demo, not an industry standard; prefer Apache Arrow for interoperable columnar formats"
+      ],
+      "project": "trinity_data",
+      "repeats": 5,
+      "results": [
+        {
+          "checksum_valid": true,
+          "median_decode_and_sum_ms": 2.796695,
+          "median_encode_ms": 5.237678,
+          "median_end_to_end_ms": 7.887088,
+          "median_peak_traced_python_bytes": 141120,
+          "path": "json_utf8",
+          "payload_or_view_bytes": 37826,
+          "scope": "serialized_bytes"
+        },
+        {
+          "checksum_valid": true,
+          "median_decode_and_sum_ms": 1.157199,
+          "median_encode_ms": 1.466429,
+          "median_end_to_end_ms": 2.623628,
+          "median_peak_traced_python_bytes": 96189,
+          "path": "binary_struct_le",
+          "payload_or_view_bytes": 16008,
+          "scope": "serialized_bytes"
+        },
+        {
+          "checksum_valid": true,
+          "median_decode_and_sum_ms": 0.107011,
+          "median_encode_ms": 0.001864,
+          "median_end_to_end_ms": 0.109785,
+          "median_peak_traced_python_bytes": 496,
+          "path": "shared_memoryview",
+          "payload_or_view_bytes": 16000,
+          "scope": "same_process_borrowed_buffer"
+        }
+      ],
+      "rows": 2000,
+      "scenario": "same_process_float64_vector",
+      "seed": 19
+    },
+    "industrial": {
+      "caveat": "No PLC, network, OPC UA, SCADA, or production safety performance measured.",
+      "environment": {
+        "cpu_count": 5,
+        "pid_is_recorded": false,
+        "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+        "processor": "not reported",
+        "python": "3.13.5"
+      },
+      "median_ms": 0.001214,
+      "project": "trinity_industrial",
+      "quality_counts": {
+        "good": 3,
+        "missing": 0,
+        "out_of_range": 0
+      },
+      "repeats": 250,
+      "scenario": "in_memory_snapshot_only",
+      "signals": 3
+    }
+  },
+  "suite": "trinity_lab_0.1.0"
+}

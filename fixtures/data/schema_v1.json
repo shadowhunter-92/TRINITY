@@ -1,0 +1,7 @@
+{
+  "fields": [
+    {"name": "sensor_id", "type": "string", "nullable": false},
+    {"name": "time_ms", "type": "int64", "nullable": false},
+    {"name": "reading", "type": "float64", "nullable": true}
+  ]
+}

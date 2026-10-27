@@ -1,0 +1,29 @@
+name: Research feature / prototype
+about: Propose a scoped, testable change to Compute, Industrial, Data, or shared integration
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: track
+    attributes:
+      label: Workstream
+      options: [Compute, Industrial, Data, Integration, Documentation]
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and evidence
+      description: What is broken or missing? Link experiments or customer evidence when available.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Observable acceptance criteria
+      description: Include correctness, performance, safety and reproducibility checks.
+    validations:
+      required: true
+  - type: textarea
+    id: non-goals
+    attributes:
+      label: Exclusions and risk boundaries
