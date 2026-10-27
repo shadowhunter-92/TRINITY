@@ -1,4 +1,4 @@
-# TRINITY — Infrastructure Research Laboratory (v0.1.0)
+# TRINITY — Infrastructure Research Laboratory (v0.1.x development)
 
 **Three working, isolated infrastructure experiments in one offline-first Python repository.**
 
@@ -6,11 +6,11 @@
 
 | Project | Working laboratory capability | Not implemented yet |
 | --- | --- | --- |
-| **Compute** | Deterministic 2-layer ReLU MLP, reference and alternate Python CPU runtimes, optional NumPy CPU runtime, numerical correctness, latency/p95 reports | ONNX/model import, CUDA/ROCm, accelerator compilers, production serving |
+| **Compute** | Deterministic 2-layer ReLU MLP, reference and alternate Python CPU runtimes, optional NumPy CPU runtime, numerical correctness, latency/p95 reports | External ONNX model import, CUDA/ROCm, accelerator compilers, production serving (optional locally-generated ONNX CPU model now supported) |
 | **Industrial** | Simulated 16-bit registers, semantic mapping, bounds/quality checks, versioned profile drift, read-only Modbus FC03/FC04 client | OPC UA connector, plant discovery, PLC write, encrypted gateway, production safety certification |
 | **Data** | JSON/binary codec tests, borrowed memoryview, data-integrity checks, schema-diff, timing and allocation profiler | Arrow/Flight connector, cross-process zero copy, DB optimization, automatic production tracing |
 
-All three default CLI examples are **local and offline**. Python **3.10+** is required. No third-party library is required to run the tests and main benchmarks. NumPy is optional for an additional accelerated CPU comparison.
+All three default CLI examples are **local and offline**. Python **3.10+** is required. No third-party library is required to run the tests and main benchmarks. NumPy is optional for an additional accelerated CPU comparison. An ONNX Runtime CPU adapter is also available as an explicit opt-in optional extra.
 
 ## Quick start (Windows / Linux / macOS)
 
@@ -52,7 +52,16 @@ Optional NumPy CPU backend:
 python -m trinitylab.compute benchmark --numpy --repeats 15
 ```
 
-**Pass condition:** Every alternative engine must match the Python reference to `atol=1e-9`, `rtol=1e-7` and produce finite outputs. A failed comparison returns exit code 2. Report includes median and p95 latency, a comparison to reference, parameters, and host metadata. The two Python paths may have different performance; no speedup is presumed.
+Optional locally-generated ONNX Runtime CPU graph (requires explicit installation):
+
+```bash
+python -m pip install -e '.[compute-onnx]'
+python -m trinitylab.compute benchmark --onnxruntime --repeats 15
+```
+
+See [`docs/ONNX_ADAPTER.md`](docs/ONNX_ADAPTER.md) for exact float32/float64 tolerance semantics, safety boundaries and limitations. This does not download any model weights.
+
+**Pass condition:** Both Python engines and optional NumPy use `atol=1e-9`, `rtol=1e-7`; the optional ONNX float32 engine explicitly uses `atol=1e-5`, `rtol=1e-4`. Every engine must produce finite, shape-correct outputs. A failed comparison returns exit code 2. Report includes median and p95 latency, a comparison to reference, parameters, and host metadata. The two Python paths may have different performance; no speedup is presumed.
 
 **What this proves:** a baseline inference-contract and testing harness across CPU implementations for a tiny deterministic neural network. **It does not prove** portability across AI accelerators, real model import, cost savings or compiler performance.
 
@@ -157,6 +166,7 @@ trinity-lab/
 │   ├── BENCHMARKS.md
 │   └── ROADMAP.md
 ├── .github/workflows/ci.yml  # GitHub Actions verification matrix
+├── .github/rulesets/main-protection.json # GitHub-importable protection settings
 ├── AGENTS.md             # Codex and coding-agent guardrails
 ├── CONTRIBUTING.md       # Contribution workflow
 ├── SECURITY.md           # Responsible disclosure entry point
@@ -190,6 +200,7 @@ This repo uses its own simple test payloads; it does not reproduce third-party i
 - [Local development and CI](docs/DEVELOPMENT.md)
 - [Contribution guide](CONTRIBUTING.md) and [security reporting](SECURITY.md)
 - [GitHub metadata and recommended owner settings](docs/REPOSITORY_SETUP.md)
+- [GitHub main branch ruleset import guide](docs/RULESET_IMPORT.md)
 - [Monorepo design decision](docs/decisions/0001-monorepo.md)
 
 Repository: [shadowhunter-92/TRINITY](https://github.com/shadowhunter-92/TRINITY).

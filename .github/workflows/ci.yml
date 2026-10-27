@@ -30,3 +30,18 @@ jobs:
         run: python scripts/demo_end_to_end.py
       - name: Verify disposable loopback Modbus example
         run: python scripts/demo_modbus_loopback.py
+  onnx-cpu:
+    name: ONNX Runtime CPU / Python 3.11
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install optional ONNX CPU adapter
+        run: python -m pip install -e '.[compute-onnx]'
+      - name: Exercise actual ONNX model generation and CPU parity tests
+        run: python -m unittest discover -s tests -p 'test_compute_onnx.py' -v
+      - name: Benchmark actual ONNX Runtime CPU execution
+        run: python -m trinitylab.compute benchmark --onnxruntime --batch 8 --warmup 1 --repeats 3

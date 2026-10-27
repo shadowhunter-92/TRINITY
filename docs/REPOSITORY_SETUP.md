@@ -20,8 +20,7 @@ repository metadata and branch-protection configuration. The owner should:
 
 1. Open **About → gear icon** and paste the description/topics above.
 2. Open **Settings → General** to verify repository name and visibility.
-3. Open **Settings → Rules → Rulesets** and create a rule for `main` requiring a PR,
-   successful CI and no force-push; set the exact required check after the first CI run.
+3. Import [the version-controlled JSON branch ruleset](../.github/rulesets/main-protection.json) through **Settings → Rules → Rulesets → New ruleset → Import a ruleset**. Follow [the step-by-step import instructions](RULESET_IMPORT.md); committing JSON does not activate protection.
 4. Open **Settings → Code security and analysis** and enable available scanning,
    dependency alerts, and private vulnerability reporting where supported.
 5. Verify GitHub Actions are enabled under **Settings → Actions**.

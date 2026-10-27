@@ -48,3 +48,7 @@ A later platform layer may unify identity, policy, observability, deployment man
 ## Capital discipline
 
 Pursue parallel research, but allocate engineering investment to evidence. Do not finance three complete compiler/OT/data infrastructure organizations merely because three markets are large. A path to a $1T company would require unusually broad adoption and enormous sustainable revenue; no figures in this repository support a valuation claim.
+
+### Compute optional ONNX CPU adapter (feature PR, awaiting review)
+
+The optional locally-generated ONNX CPU adapter has its own documentation in `docs/ONNX_ADAPTER.md`. This is not model import, not cross-hardware portability, and should not be marked production ready. Issue #1 is fulfilled only for the scoped synthetic-graph CPU adapter, pending optional CI validation.

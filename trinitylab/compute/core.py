@@ -156,7 +156,7 @@ def benchmark(engines: list[Engine], batch: list[list[float]], warmup: int = 3, 
     entries = []
     for engine in engines:
         output = engine.infer(batch)
-        correctness = compare_outputs(reference, output)
+        correctness = compare_outputs(reference, output, atol=getattr(engine, "atol", 1e-9), rtol=getattr(engine, "rtol", 1e-7))
         for _ in range(warmup):
             engine.infer(batch)
         timings = []
@@ -164,7 +164,7 @@ def benchmark(engines: list[Engine], batch: list[list[float]], warmup: int = 3, 
             start = time.perf_counter()
             engine.infer(batch)
             timings.append(time.perf_counter() - start)
-        entries.append({"engine": engine.name, "median_ms": median_ms(timings), "p95_ms": percentile_ms(timings, 95), "correctness": correctness})
+        entries.append({"engine": engine.name, "median_ms": median_ms(timings), "p95_ms": percentile_ms(timings, 95), "correctness": correctness, "tolerance": {"atol": getattr(engine, "atol", 1e-9), "rtol": getattr(engine, "rtol", 1e-7)}, "runtime_versions": getattr(engine, "versions", None)})
     baseline = entries[0]["median_ms"]
     for entry in entries:
         entry["speedup_vs_reference"] = round(baseline / entry["median_ms"], 4) if entry["median_ms"] else None
