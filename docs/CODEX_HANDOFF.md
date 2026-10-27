@@ -7,7 +7,7 @@ Before each Codex task, read `AGENTS.md`, `README.md`, `docs/ARCHITECTURE.md`,
 not directly on `main`. Run the full verification suite and report actual output.
 Do not claim real-world portability or savings from synthetic benchmarks.
 
-## Task A — Compute ONNX adapter (suggested first PR)
+## Task A — Compute ONNX adapter (implemented in feature PR; verify CI before merge)
 
 **Goal:** Add an optional, opt-in ONNX Runtime CPU provider adapter capable of loading
 one small licensed ONNX test model, without changing the standard-library offline core.
@@ -54,3 +54,7 @@ three adapters exist, with explicit contracts and deterministic validation fixtu
 > small commits, preserving offline-by-default behavior. Add tests and documentation.
 > Execute the repository verification commands, record observed outcomes and known
 > limitations, and prepare a PR summary. Do not broaden scope or touch live systems.
+
+## Repository policy
+
+The branch-protection JSON lives in `.github/rulesets/main-protection.json`. It must be imported by a repository administrator via GitHub UI; see `docs/RULESET_IMPORT.md`. Never assert a committed ruleset is enforced until verified in GitHub settings.

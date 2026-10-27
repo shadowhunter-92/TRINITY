@@ -18,6 +18,7 @@ def main() -> int:
     parser.add_argument("--repeats", type=int, default=15)
     parser.add_argument("--warmup", type=int, default=3)
     parser.add_argument("--numpy", action="store_true", help="Include optional NumPy backend")
+    parser.add_argument("--onnxruntime", action="store_true", help="Include optional ONNX Runtime CPU float32 backend; no external model downloads")
     parser.add_argument("--output", help="Optional JSON report path")
     args = parser.parse_args()
     try:
@@ -25,6 +26,9 @@ def main() -> int:
         engines = [ReferenceEngine(m), BatchedEngine(m)]
         if args.numpy:
             engines.append(NumpyEngine(m))
+        if args.onnxruntime:
+            from trinitylab.compute.onnx_adapter import ONNXRuntimeCPUEngine
+            engines.append(ONNXRuntimeCPUEngine(m))
         report = benchmark(engines, make_inputs(args.batch, args.input_dim, args.seed + 1), args.warmup, args.repeats)
         report["model"] = {"input_dim": args.input_dim, "hidden_dim": args.hidden_dim, "output_dim": args.output_dim, "seed": args.seed}
         emit(report, args.output)
